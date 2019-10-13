@@ -197,7 +197,7 @@ The purpose of these is to help recognize the click / tap gesture when using a p
 | Function name | Description | Parameters |
 | --- | --- | --- | 
 | setStartLevel | Set the starting level for the next game.<br/>Has no effect if invoked while a game is being played. | level: an integer between 0 and 19 | 
-| togglePlayPause | Starts a game if not playing, otherwise pauses/resumes the ongoing game.<br/>It is recommended to bind this method to the 'Play/Pause' button's `click` event, as shown in the ['Basic use' example](#basic-use). | none | 
+| togglePlayPause | Starts a game if not playing, otherwise pauses/resumes the ongoing game.<br/>It is recommended to bind this method to the 'Play/Pause' button's `click` event, as shown in the ['Basic setup' example](#basic-setup). | none | 
 | quit | If playing, terminates the game. | none | 
 | on | Adds an event handler. | event: name of the event (see table below),<br/>handler: callback function to be invoked when the event fires. | 
 | off | Removes an event handler. | event: name of the event (see table below),<br/>handler: callback function to be removed. | 
