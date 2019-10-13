@@ -1,5 +1,6 @@
 
 
+
 classic-tetris-js
 ====================
 
@@ -179,11 +180,15 @@ const tetris = new ClassicTetris(canvas, {
 | pauseSound | Played when pausing the game. | undefined |
 | gameTheme | Theme song that plays throughout the game.<br/>Playback automatically pauses when the game pauses, and resumes when the game resumes. | undefined |
 
-### Other parameters
+### Pointer parameters
+
+The purpose of these is to help recognize the click / tap gesture when using a pointer device to control the game.
 
 | Parameter name | Description | Default value |
 | --- | --- | --- | 
-| tapClickMaxDuration | Maximum duration of a tap/click (in ms) to be regarded as such. | 500 |
+| tapClickMaxDistance | Maximum distance between pointer-down and pointer-up coordinates (in pixels) for the game to count it as a click / tap. | 10 |
+| tapClickMaxDuration | Maximum duration of a click / tap (in ms) to be regarded as such. | 500 |
+
 
 ## Functions
 

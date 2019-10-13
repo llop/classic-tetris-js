@@ -1,6 +1,6 @@
 {
   "name": "classic-tetris-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An implementation of Tetris that takes after the older versions of the game",
   "main": "classic-tetris.js",
   "scripts": {

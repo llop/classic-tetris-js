@@ -249,6 +249,7 @@ class ClassicTetris {
         gridColor = '#ddd',
         
         tapClickMaxDuration = 500,
+        tapClickMaxDistance = 10,
         
         rotateSound = undefined,
         moveSound = undefined,
@@ -330,6 +331,9 @@ class ClassicTetris {
     
     // max time between pointerdown and pointerup for the game to count it as click
     this.tapClickMaxDuration = tapClickMaxDuration;   // grandpa's tap/click duration!
+    // maximum distance between pointer-down and pointer-up coordinates 
+    // for the game to count it as a click/tap
+    this.tapClickMaxDistance = tapClickMaxDistance;
     
     // sounds
     this.rotateSound = rotateSound;             // rotation
@@ -418,7 +422,6 @@ class ClassicTetris {
     
     // pointer game controls
     this.pointerMoveDownEnabled = false;  // flag to allow/disallow pointer to move piece down
-    this.pointerMoved = true;             // flag to allow/disallow pointer to rotate piece
     
     // game flags
     this.playing = false;       // ongoing game
@@ -630,7 +633,6 @@ class ClassicTetris {
   // get game params ready for a new game
   _resetParams() {
     //  pointer stuff
-    this.pointerMoved = true;
     this.pointerMoveDownEnabled = false;
     
     // movement/control flags
@@ -828,8 +830,6 @@ class ClassicTetris {
     // no movement tracking during pause
     if (this.gameState === ClassicTetris.STATE_PAUSE) return;
     
-    this.pointerMoved = true;
-    
     // find out if pointer is left or right or below the piece
     // then move piece accordingly
     const { x, y } = this._getEventCoords(event);
@@ -877,9 +877,15 @@ class ClassicTetris {
     this.xIni = x;                  // store pointer coords
     this.yIni = y;
     this.tIni = performance.now();  // time since time origin
-    this.pointerMoved = false;      // pointer moved flag 
   }
   
+  
+  // touch gesture times, relevant in tap detection:
+  // Fingertip forces and completion time for index finger and thumb touchscreen gestures.
+  // https://www.ncbi.nlm.nih.gov/pubmed/28314216
+  // "Tap was the fastest gesture to complete at 133(83)ms,   // Mean(±SD) times
+  // followed by slide right at 421(181)ms. 
+  // On average, participants took the longest to complete the stretch gesture at 920(398)ms."
   
   // pointer up handler
   _handlePointerUp = event => {
@@ -888,9 +894,13 @@ class ClassicTetris {
     // do nothing during pause
     if (this.gameState === ClassicTetris.STATE_PAUSE) return;
     
-    const { x, y } = this._getEventCoords(event);       // detect tap/click:
-    if (!this.pointerMoved &&                           // pointer location didn't move
-        this.xIni === x && this.yIni === y &&           // same coords
+    const { x, y } = this._getEventCoords(event);
+    const a = this.xIni - x;                  // calculate distance
+    const b = this.yIni - y;                  // between tap-down and tap-up coordinates
+    const dist = Math.sqrt(a * a + b * b);
+    
+    // detect tap/click:
+    if (dist <= this.tapClickMaxDistance &&                           // similar coords
         performance.now() - this.tIni <= this.tapClickMaxDuration) {  // gesture was short
         
       if (event.button === 0) {
@@ -914,7 +924,6 @@ class ClassicTetris {
     
     // reset pointer flags
     this.pointerMoveDownEnabled = false;
-    this.pointerMoved = true;
   }
   
   // wheel rotates the piece
@@ -1381,7 +1390,6 @@ class ClassicTetris {
         
         // reset pointer flags
         this.pointerMoveDownEnabled = false;
-        this.pointerMoved = true;
         
         // resume theme song
         if (this.gameTheme) {
